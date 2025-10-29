@@ -2,7 +2,17 @@
 
 Get up and running with GitLab Secrets Manager in 5 minutes!
 
-## 1. Install Dependencies
+## 1. Install the Package
+
+**Recommended:** Install the package in editable mode:
+
+```bash
+pip install -e .
+```
+
+This allows you to use the `gitlab-secrets` command directly.
+
+**Alternative:** Install just dependencies (then use `python gitlab_secrets.py`):
 
 ```bash
 pip install -r requirements.txt
@@ -39,33 +49,36 @@ pip install -r requirements.txt
 
 ```bash
 # List all your GitLab secrets
-python gitlab_secrets.py list
+gitlab-secrets list
+# Or: python gitlab_secrets.py list
 ```
 
 ## 4. Start Managing Secrets
 
+**Note:** If you installed with `pip install -e .`, use `gitlab-secrets`. Otherwise, use `python gitlab_secrets.py`.
+
 ```bash
 # Create a new secret
-python gitlab_secrets.py create MY_SECRET "secret_value"
+gitlab-secrets create MY_SECRET "secret_value"
 
 # Read a secret
-python gitlab_secrets.py read MY_SECRET
+gitlab-secrets read MY_SECRET
 
 # Update a secret
-python gitlab_secrets.py update MY_SECRET "new_value"
+gitlab-secrets update MY_SECRET "new_value"
 
 # Create or update (upsert) - useful for sync operations
-python gitlab_secrets.py create MY_SECRET "value" --upsert
+gitlab-secrets create MY_SECRET "value" --upsert
 
 # Download all secrets
-python gitlab_secrets.py download --output backup.json
+gitlab-secrets download --output backup.json
 
 # Delete a secret
-python gitlab_secrets.py delete MY_SECRET
+gitlab-secrets delete MY_SECRET
 ```
 
 ## Need Help?
 
-Run `python gitlab_secrets.py --help` to see all available commands and options.
+Run `gitlab-secrets --help` (or `python gitlab_secrets.py --help`) to see all available commands and options.
 
 For more detailed documentation, see [README.md](README.md).

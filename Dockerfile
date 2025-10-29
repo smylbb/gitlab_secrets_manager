@@ -36,8 +36,8 @@ RUN chown -R appuser:appuser /app
 # Switch to non-root user
 USER appuser
 
-# Set the entrypoint - allows both 'gitlab-secrets' and 'python gitlab_secrets.py'
-ENTRYPOINT ["python", "gitlab_secrets.py"]
+# Set the entrypoint to use the installed 'gitlab-secrets' command
+ENTRYPOINT ["gitlab-secrets"]
 
 # Default command (can be overridden when running the container)
 CMD ["--help"]
