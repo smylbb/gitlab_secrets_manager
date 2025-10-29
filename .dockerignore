@@ -4,10 +4,11 @@
 .gitattributes
 
 # Documentation (not needed in Docker image)
-README.md
+# README.md is needed by setup.py for long_description
 QUICKSTART.md
 LICENSE
-*.md
+README.docker.md
+# Note: *.md would exclude README.md, so we list specific files instead
 
 # Example files (not needed in Docker image)
 example-variables.*

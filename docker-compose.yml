@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   gitlab-secrets:
     build:
@@ -17,6 +15,9 @@ services:
       - ./data:/app/data:rw
     # Override default command
     command: ["list"]
+    # IMPORTANT: When downloading files, use --output /app/data/filename
+    # to save to the mounted volume (./data on host). Files saved to /app
+    # (the default location) will be lost when container exits.
     # Keep container running (remove if you want it to exit after command)
     stdin_open: true
     tty: true

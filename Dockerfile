@@ -16,8 +16,9 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Copy requirements and setup files first (for better layer caching)
-COPY requirements.txt setup.py ./
+# Copy requirements, setup, and README first (for better layer caching)
+# README.md is needed by setup.py for long_description
+COPY requirements.txt setup.py README.md ./
 
 # Copy application files
 COPY config.py gitlab_client.py gitlab_secrets.py ./
