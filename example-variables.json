@@ -1,0 +1,25 @@
+{
+  "variables": [
+    {
+      "key": "API_KEY",
+      "value": "secret-api-key-123",
+      "protected": true,
+      "masked": true,
+      "raw": false
+    },
+    {
+      "key": "DATABASE_URL",
+      "value": "postgresql://localhost:5432/mydb",
+      "protected": false,
+      "masked": false,
+      "raw": false
+    },
+    {
+      "key": "REDIS_URL",
+      "value": "redis://localhost:6379",
+      "protected": false,
+      "masked": false,
+      "raw": false
+    }
+  ]
+}

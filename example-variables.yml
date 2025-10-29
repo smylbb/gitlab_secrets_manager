@@ -1,0 +1,5 @@
+# Alternative YAML format - simple key-value pairs
+API_KEY: secret-api-key-123
+DATABASE_URL: postgresql://localhost:5432/mydb
+REDIS_URL: redis://localhost:6379
+WEBHOOK_SECRET: webhook-secret-456

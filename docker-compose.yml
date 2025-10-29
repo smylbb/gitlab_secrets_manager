@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  gitlab-secrets:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gitlab-secrets-manager:latest
+    container_name: gitlab-secrets-manager
+    # Pass environment variables from host or .env file
+    environment:
+      - GITLAB_URL=${GITLAB_URL:-https://gitlab.com}
+      - GITLAB_TOKEN=${GITLAB_TOKEN}
+      - GITLAB_PROJECT_ID=${GITLAB_PROJECT_ID}
+    # Mount volume for input/output files
+    volumes:
+      - ./data:/app/data:rw
+    # Override default command
+    command: ["list"]
+    # Keep container running (remove if you want it to exit after command)
+    stdin_open: true
+    tty: true

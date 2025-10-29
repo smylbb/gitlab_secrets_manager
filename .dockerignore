@@ -1,0 +1,93 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (not needed in Docker image)
+README.md
+QUICKSTART.md
+LICENSE
+*.md
+
+# Example files (not needed in Docker image)
+example-variables.*
+env.example
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+*-env/
+*env*/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Build artifacts
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+*.cover
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Logs and temporary files
+*.log
+*.bak
+*.tmp
+*.swp
+*.swo
+*~
+
+# Sensitive/Output files
+.env
+.env.local
+.env.*.local
+*.env
+secrets.*
+newvars.*
+longvars.*
+my-values.*
+*newvars*
+001newvars*
+output/
+
+# CI/CD (keep in repo, but not needed in image)
+.github/
+.gitlab-ci/
+Jenkinsfile
+
+# Docker files (not needed inside image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
