@@ -107,8 +107,14 @@ docker-compose run --rm gitlab-secrets list
 docker-compose run --rm gitlab-secrets create API_KEY "secret123" --protected
 
 # Download variables
+# IMPORTANT: Always use --output /app/data/filename to save to the mounted volume
 docker-compose run --rm gitlab-secrets download --output /app/data/secrets.json --include-values
+
+# Or download as YAML
+docker-compose run --rm gitlab-secrets download --output /app/data/secrets.yaml --include-values
 ```
+
+**⚠️ Important:** When downloading files, you **must** specify `--output /app/data/filename` to save to the mounted volume. Files saved to the default location (e.g., `secrets.yml` in `/app`) will be **lost** when the container exits because `/app` is not mounted - only `/app/data` is mounted to `./data` on your host.
 
 ## Dockerfile Options
 

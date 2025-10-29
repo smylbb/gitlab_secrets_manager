@@ -32,7 +32,14 @@ from gitlab_client import GitLabClient
 
 
 # Initialize Rich console for beautiful terminal output
-console = Console()
+# In Docker environments, set a large height to prevent truncation
+# This ensures all table rows are displayed even if terminal size can't be detected
+console = Console(
+    force_terminal=True,
+    width=None,  # Auto-detect width
+    height=10000,  # Set very large height for Docker (Rich won't truncate, just uses for layout)
+    legacy_windows=False
+)
 
 
 # Variable key validation
@@ -804,8 +811,19 @@ def list_variables(ctx, sort: str, reverse: bool, show_values: bool, filter: str
             table.add_row(*row_data)
         
         # Display the table
+        # Rich will render all rows - output may be long in Docker, but all data is there
         console.print(table)
-        console.print(f"\n[dim]Total: {len(variables)} variables[/dim]")
+        
+        # Show total count with note about display
+        total_count = len(variables)
+        console.print(f"\n[dim]Total: {total_count} variables[/dim]")
+        
+        # Warn if table might be truncated in terminal output
+        if total_count > 50:
+            console.print(f"[yellow]Note: Showing all {total_count} variables above. If you can't see them all, try:[/yellow]")
+            console.print(f"[dim]  - Scroll up in your terminal/Docker output[/dim]")
+            console.print(f"[dim]  - Use 'gitlab-secrets download' to export to a file[/dim]")
+            console.print(f"[dim]  - Use '--filter' option to narrow results[/dim]")
         
         # Warn if values are being displayed
         if show_values:
