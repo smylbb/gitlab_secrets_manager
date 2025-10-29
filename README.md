@@ -18,11 +18,22 @@ A powerful command-line tool for managing GitLab CI/CD variables (secrets) with 
 
 1. Clone this repository:
 ```bash
-git clone <repository-url>
-cd git-secrets-manager
+git clone https://github.com/smylbb/gitlab_secrets_manager.git
+cd gitlab_secrets_manager
 ```
 
-2. Install dependencies:
+2. Install the package (recommended):
+```bash
+pip install -e .
+```
+
+This installs the package in editable mode, allowing you to use the `gitlab-secrets` command directly:
+```bash
+gitlab-secrets list
+gitlab-secrets create API_KEY "value"
+```
+
+**Alternative:** Install just dependencies (then use `python gitlab_secrets.py`):
 ```bash
 pip install -r requirements.txt
 ```
@@ -49,106 +60,114 @@ You can find your project ID in the GitLab project settings under "General" or c
 
 ### Create Secrets
 
+**Note:** If you installed with `pip install -e .`, you can use `gitlab-secrets` instead of `python gitlab_secrets.py`:
+
 ```bash
 # Create a single variable
-python gitlab_secrets.py create KEY_NAME "value"
+gitlab-secrets create KEY_NAME "value"
+# Or: python gitlab_secrets.py create KEY_NAME "value"
 
 # With options
-python gitlab_secrets.py create KEY_NAME "value" --protected --masked --raw
+gitlab-secrets create KEY_NAME "value" --protected --masked --raw
 
 # Upsert: create if new, update if exists
-python gitlab_secrets.py create KEY_NAME "value" --upsert
+gitlab-secrets create KEY_NAME "value" --upsert
 
 # Bulk create from file
-python gitlab_secrets.py create --file variables.json
-python gitlab_secrets.py create --file .env.production
+gitlab-secrets create --file variables.json
+gitlab-secrets create --file .env.production
 
 # Bulk upsert: creates or updates existing variables
-python gitlab_secrets.py create --file variables.json --upsert
+gitlab-secrets create --file variables.json --upsert
 ```
 
 ### Read a Secret
 
 ```bash
-python gitlab_secrets.py read KEY_NAME
+gitlab-secrets read KEY_NAME
+# Or: python gitlab_secrets.py read KEY_NAME
 ```
 
 ### Update Secrets
 
 ```bash
 # Update a single variable
-python gitlab_secrets.py update KEY_NAME "new_value"
+gitlab-secrets update KEY_NAME "new_value"
+# Or: python gitlab_secrets.py update KEY_NAME "new_value"
 
 # Update other properties
-python gitlab_secrets.py update KEY_NAME "new_value" --protected true --masked false
+gitlab-secrets update KEY_NAME "new_value" --protected true --masked false
 
 # Update environment scope
-python gitlab_secrets.py update KEY_NAME "new_value" --environment-scope staging
+gitlab-secrets update KEY_NAME "new_value" --environment-scope staging
 
 # Bulk update from file
-python gitlab_secrets.py update --file updates.json
-python gitlab_secrets.py update --file .env.updates
+gitlab-secrets update --file updates.json
+gitlab-secrets update --file .env.updates
 ```
 
 ### Delete a Secret
 
 ```bash
-python gitlab_secrets.py delete KEY_NAME
+gitlab-secrets delete KEY_NAME
+# Or: python gitlab_secrets.py delete KEY_NAME
 ```
 
 ### List All Secrets
 
 ```bash
 # List all secrets sorted by key (default)
-python gitlab_secrets.py list
+gitlab-secrets list
+# Or: python gitlab_secrets.py list
 
 # Sort by different fields
-python gitlab_secrets.py list --sort protected
-python gitlab_secrets.py list --sort masked --reverse
+gitlab-secrets list --sort protected
+gitlab-secrets list --sort masked --reverse
 
 # Show values (careful with sensitive data!)
-python gitlab_secrets.py list --show-values
+gitlab-secrets list --show-values
 
 # Filter by key pattern (regex supported)
-python gitlab_secrets.py list --filter "API.*"
-python gitlab_secrets.py list --filter "DATABASE_" --show-values
-python gitlab_secrets.py list --filter "^DB_" --sort key
+gitlab-secrets list --filter "API.*"
+gitlab-secrets list --filter "DATABASE_" --show-values
+gitlab-secrets list --filter "^DB_" --sort key
 ```
 
 ### Download Secrets
 
 ```bash
 # Download as YAML simple format (default)
-python gitlab_secrets.py download
+gitlab-secrets download
+# Or: python gitlab_secrets.py download
 
 # Download as YAML simple format with custom name
-python gitlab_secrets.py download --simple --output myvars.yml
-python gitlab_secrets.py download --simple --output backup.yaml
+gitlab-secrets download --simple --output myvars.yml
+gitlab-secrets download --simple --output backup.yaml
 
 # Download as YAML structured format with custom name
-python gitlab_secrets.py download --structured --output vars.yml
-python gitlab_secrets.py download --structured --output full-backup.yaml
+gitlab-secrets download --structured --output vars.yml
+gitlab-secrets download --structured --output full-backup.yaml
 
 # Download as JSON (format auto-detected from .json extension)
-python gitlab_secrets.py download --output backup.json
+gitlab-secrets download --output backup.json
 
 # Download as .env file (format auto-detected from .env extension)
-python gitlab_secrets.py download --output backup.env
+gitlab-secrets download --output backup.env
 
 # Or explicitly specify format
-python gitlab_secrets.py download --format json --output backup.json
-python gitlab_secrets.py download --format env --output backup.env
+gitlab-secrets download --format json --output backup.json
+gitlab-secrets download --format env --output backup.env
 
 # Include actual values (use with caution!)
-python gitlab_secrets.py download --include-values
+gitlab-secrets download --include-values
 
 # Sort by different criteria
-python gitlab_secrets.py download --sort protected --reverse
+gitlab-secrets download --sort protected --reverse
 
 # Download only specific variables by filter pattern
-python gitlab_secrets.py download --filter "API.*" --output api-vars.yaml
-python gitlab_secrets.py download --filter "DATABASE_" --include-values
-python gitlab_secrets.py download --filter "^PROD_" --output prod-vars.env
+gitlab-secrets download --filter "API.*" --output api-vars.yaml
+gitlab-secrets download --filter "DATABASE_" --include-values
+gitlab-secrets download --filter "^PROD_" --output prod-vars.env
 ```
 
 ## Project Structure
@@ -217,12 +236,12 @@ The format is automatically detected from the file extension when `--output` is 
 **Note:** If both `--format` and `--output` with an extension are specified, the file extension takes precedence. This ensures the output file format matches its extension.
 
 **How to choose:**
-- Default: `python gitlab_secrets.py download` → Creates simple format in `secrets.yml` (default)
-- Simple YAML: `python gitlab_secrets.py download --simple --output filename.yml` → Just key-value pairs
-- Structured YAML: `python gitlab_secrets.py download --structured --output filename.yml` → Full metadata
-- JSON: `python gitlab_secrets.py download --output filename.json` → JSON format (auto-detected)
-- .env: `python gitlab_secrets.py download --output filename.env` → .env format (auto-detected)
-- Format override: `python gitlab_secrets.py download --format json --output data.txt` → Uses `--format` value (no extension detected)
+- Default: `gitlab-secrets download` → Creates simple format in `secrets.yml` (default)
+- Simple YAML: `gitlab-secrets download --simple --output filename.yml` → Just key-value pairs
+- Structured YAML: `gitlab-secrets download --structured --output filename.yml` → Full metadata
+- JSON: `gitlab-secrets download --output filename.json` → JSON format (auto-detected)
+- .env: `gitlab-secrets download --output filename.env` → .env format (auto-detected)
+- Format override: `gitlab-secrets download --format json --output data.txt` → Uses `--format` value (no extension detected)
 
 ### JSON Format
 ```json
@@ -258,22 +277,22 @@ API_KEY=your_value_here
 
 ```bash
 # 1. Create a secret
-python gitlab_secrets.py create DATABASE_URL "postgresql://localhost:5432/mydb" --protected
+gitlab-secrets create DATABASE_URL "postgresql://localhost:5432/mydb" --protected
 
 # 2. Read it back
-python gitlab_secrets.py read DATABASE_URL
+gitlab-secrets read DATABASE_URL
 
 # 3. Update it
-python gitlab_secrets.py update DATABASE_URL "postgresql://localhost:5432/newdb"
+gitlab-secrets update DATABASE_URL "postgresql://localhost:5432/newdb"
 
 # 4. List all secrets
-python gitlab_secrets.py list
+gitlab-secrets list
 
 # 5. Download all secrets
-python gitlab_secrets.py download --output backup.json
+gitlab-secrets download --output backup.json
 
 # 6. Delete a secret
-python gitlab_secrets.py delete DATABASE_URL
+gitlab-secrets delete DATABASE_URL
 ```
 
 ### Bulk Operations
@@ -334,27 +353,27 @@ For advanced features like variable expansion or multiline values, use YAML or J
 Then use:
 ```bash
 # Bulk create
-python gitlab_secrets.py create --file variables.yaml
-python gitlab_secrets.py create --file variables.json
-python gitlab_secrets.py create --file .env.production
+gitlab-secrets create --file variables.yaml
+gitlab-secrets create --file variables.json
+gitlab-secrets create --file .env.production
 
 # Bulk update
-python gitlab_secrets.py update --file updates.yaml
-python gitlab_secrets.py update --file updates.json
-python gitlab_secrets.py update --file .env.updates
+gitlab-secrets update --file updates.yaml
+gitlab-secrets update --file updates.json
+gitlab-secrets update --file .env.updates
 ```
 
 **Bulk Download:**
 
 ```bash
 # Download to JSON
-python gitlab_secrets.py download --include-values --output secrets.json
+gitlab-secrets download --include-values --output secrets.json
 
 # Download to .env format
-python gitlab_secrets.py download --format env --include-values --output .env.backup
+gitlab-secrets download --format env --include-values --output .env.backup
 
 # Download filtered variables
-python gitlab_secrets.py download --filter "API.*" --include-values --output api-vars.json
+gitlab-secrets download --filter "API.*" --include-values --output api-vars.json
 ```
 
 **Bulk Operation Output:**
@@ -362,7 +381,7 @@ python gitlab_secrets.py download --filter "API.*" --include-values --output api
 When performing bulk operations, the tool shows real-time progress for each variable:
 
 ```bash
-python gitlab_secrets.py create --file variables.yaml
+gitlab-secrets create --file variables.yaml
   ✓ Created: API_KEY
   ✓ Created: DATABASE_URL
   ✗ DUPLICATE_KEY: 409 Conflict - Variable already exists
@@ -377,7 +396,7 @@ Failed: 1
 When using `--upsert`, existing variables are automatically updated:
 
 ```bash
-python gitlab_secrets.py create --file variables.yaml --upsert
+gitlab-secrets create --file variables.yaml --upsert
   ✓ Created: API_KEY
   ✓ Created: DATABASE_URL
   🔄 Updated: DUPLICATE_KEY (already exists)
@@ -520,7 +539,7 @@ Values are treated literally - exactly as written in the file. For advanced feat
 - **Variable doesn't exist**: The delete command will display a "Variable not found" warning message but will not throw an error.
 
 **Best Practices:**
-- Use `python gitlab_secrets.py list` to check existing variables before creating new ones
+- Use `gitlab-secrets list` to check existing variables before creating new ones
 - Use bulk operations to get a complete summary of successful and failed operations
 - Use filters (`--filter`) to preview which variables match your pattern before bulk operations
 - Use `--upsert` when you want to synchronize variables (e.g., syncing from another environment)

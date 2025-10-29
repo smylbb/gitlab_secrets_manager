@@ -1,5 +1,5 @@
 """Setup script for GitLab Secrets Manager."""
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -16,7 +16,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/smylbb/gitlab_secrets_manager",
-    packages=find_packages(),
+    py_modules=["gitlab_secrets", "gitlab_client", "config"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
